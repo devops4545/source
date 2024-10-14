@@ -1,0 +1,28 @@
+name: Copy Secrets from Source to Target Repo
+
+on:
+  workflow_dispatch:  # Allows you to manually trigger this workflow
+  push:
+    branches:
+        - main
+
+jobs:
+  copy-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get install -y gh
+
+      - name: Copy Secret from Source to Target Repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this token
+        run: |
+          # Secret value needs to be sourced securely, this is an example
+          secret_value="${{ secrets.TEST }}"
+          
+          # Set the secret in the target repository using GitHub CLI
+          gh secret set TARGET_SECRET --repo devops4545/destination --body "$secret_value"
