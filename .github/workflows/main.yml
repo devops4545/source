@@ -19,9 +19,11 @@ jobs:
 
       - name: Copy Secret from Source to Target Repo
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this token
+          GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # GitHub automatically provides this token
         run: |
           # Secret value needs to be sourced securely, this is an example
+
+          gh auth login --with-token <<< "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
           secret_value="${{ secrets.TEST }}"
           
           # Set the secret in the target repository using GitHub CLI
